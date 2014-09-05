@@ -1,0 +1,2 @@
+Exception handling is a specific process that deals with errors in a manageable and predictable way. 
+The main thing we want to make you aware of at this point, is how exception handling works and what it looks like.
