@@ -1,0 +1,118 @@
+1) This is because one table is associated with each other. This association can be create with primary/foreign keys and various syntax.
+
+2) SQL is Structured Query Language. It is a database language designed to manage data held in relational database management system.
+
+3) The two predominant views are Data and Schema views. Data view displays like a spreadsheet, with the table columns at the top and rows of data per each object instance. A schema view shows us the column names and the value type of each column.
+
+4) primary key.
+
+5) A foreign key is a identification that ties a table to another. The foreign key is always on the “many” side and is always in an integer type.
+
+6) ActiveRecord is a way to access the database. A database table is related to a class. An object of that class is created as a row in the table. This object can have different attribute values shown as the columns in the table. We can create, retrieve, update and delete the object instances by altering the database table.
+
+7) “crazy_monkeys” by using “CrazyMonkey”.tableize
+
+8) Project Model:
+
+class Project < ActiveRecord::Base
+	has_many :issues, foreign_key: :project_id
+end
+
+class Issue < ActiveRecord::Base
+	belongs_to :project, foreign_key: :project_id
+end
+
+note to self, the project_id is referenced from the Issue table.
+
+9)
+
+class Zoo
+	has_many :animals
+end
+
+What do you expect the other model to be and what does database schema look like?
+
+class Animal
+	belongs_to :zoo
+end
+
+the database schema will have tables named:
+
+zoos table with a primary key of id
+animals table with a primary key of id and foreign key of zoo_id
+
+What are the methods that are now available to a zoo to call related to animals?
+
+zoo.animals, will return all a list of all of the animals
+zoo.animals.first, will return the first row of data in the animals table.
+
+How do i create an animal called “jumpster” in a zoo called “San diego zoo”?
+
+zoo = Zoo.create(name: ‘San Diego Zoo’)
+animal = Animal.create(name: ‘jumpster’, zoo_id: 1)
+
+10) Mass assignment allows us to assign multiple values to attributes with only a single assignment operator.
+
+Mass assignment:
+
+Post.new(title: ‘My first post’, topic: ‘Life’)
+Post.create(title: ‘My first post’, topic: ‘Life’)
+
+non-mass assignemtn:
+
+post = Post.new
+post.title =;My first post’
+post.topic = ‘Life’
+
+11) The code will return the first row of datafor the first animal instance object in the animals table.
+
+12) if I have a table called “animals” with columns called “name”, and a model called “Animal”, how do I instantiate an animal object with name set to “Joe”. Which methods makes sure it save to the database?
+
+animal = Animal.create(name: ‘Joe’) # => Using “create” will hit the database and automatically save it.
+
+or
+
+animal = Animal.new(name: ‘Joe’) # => Using “new” will require you to use the save method afterwards to save it to the database.
+animal.save
+
+
+13) How does a M:M association work at the database level?
+
+On the database level of a M:M association, we use a join table to support it. Both of the primary models will each have a  1:M association with the join table. By using the “has_many :through” technique, we are able to create an indirect M:M association with the two primary models.
+
+14) What are the two ways to support a M:M association at the ActiveRecord model level? Pros and cons of each approach?
+
+The two ways to support a M:M association are the “has_many :through” and “has_and_belongs_to_many” methods.
+
+“has_many :through” requires an explicit join model and a join table, but it is more flexible and we can add additional attributes to the join table.
+“has_and_belongs_to_many” doesnt require a join model or a join table, but it is less flexible and we cannot add additional attributes to the join table.
+
+
+15)Suppose we have a “User” model and a “Group” model and we have a M:M association all set up. how do we associate the two?
+
+We will need to use a join model (userGroup) and table(user_groups) in this situation.
+
+The “User” model:
+
+class User < ActiveRecord::Base
+	has_many :user_groups, foreign_key::user_id
+	has_many :groups, through::user_groups
+end
+
+The “User_Group” model:
+
+class UserGroup < ActiveRecord::Base
+	belongs_to :user, foreign_key::user_id
+	belongs_to :group, foreign_key::group_id
+end
+
+The “Group” model:
+
+class Group < ActiveRecord::Base
+	has_many :user_groups, foreign_key::group_id
+	has_many :users, through::user_groups
+end
+
+
+
+ 
